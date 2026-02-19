@@ -84,7 +84,9 @@ export function PngToPdfTool() {
     return (
       <DownloadButton
         result={result}
-        filename="png-to-pdf.pdf"
+        filename={files.length === 1
+          ? `${files[0].name.replace(/\.[^.]+$/, "")}.pdf`
+          : `png-${files.length}-pages.pdf`}
         onReset={handleReset}
       />
     );

@@ -9,12 +9,6 @@ const PAGE_SIZES: Record<string, { width: number; height: number }> = {
   letter: { width: 612, height: 792 },
 };
 
-const DPI_FOR_QUALITY: Record<ImageQuality, number> = {
-  standard: 150,
-  high: 200,
-  maximum: 300,
-};
-
 export interface ImageToPdfOptions {
   pageSize: PageSize;
   orientation: Orientation;
@@ -29,7 +23,6 @@ export async function imagesToPdf(
 ): Promise<Blob> {
   const pdf = await PDFDocument.create();
   const total = files.length;
-  const dpi = DPI_FOR_QUALITY[options.quality || "high"];
   const margin = options.margin ?? 0;
 
   for (let i = 0; i < total; i++) {
@@ -50,8 +43,18 @@ export async function imagesToPdf(
     let pageHeight: number;
 
     if (options.pageSize === "fit") {
-      pageWidth = (image.width / dpi) * 72;
-      pageHeight = (image.height / dpi) * 72;
+      // 1 pixel = 1 PDF point: preserves every pixel at 100% zoom.
+      // The full image data is embedded losslessly; no resampling occurs.
+      pageWidth = image.width;
+      pageHeight = image.height;
+
+      const page = pdf.addPage([pageWidth, pageHeight]);
+      page.drawImage(image, {
+        x: 0,
+        y: 0,
+        width: pageWidth,
+        height: pageHeight,
+      });
     } else {
       const size = PAGE_SIZES[options.pageSize];
       if (options.orientation === "landscape") {
@@ -61,31 +64,31 @@ export async function imagesToPdf(
         pageWidth = size.width;
         pageHeight = size.height;
       }
+
+      const page = pdf.addPage([pageWidth, pageHeight]);
+
+      const usableWidth = pageWidth - margin * 2;
+      const usableHeight = pageHeight - margin * 2;
+
+      const imgAspect = image.width / image.height;
+      const areaAspect = usableWidth / usableHeight;
+
+      let drawWidth: number;
+      let drawHeight: number;
+
+      if (imgAspect > areaAspect) {
+        drawWidth = usableWidth;
+        drawHeight = usableWidth / imgAspect;
+      } else {
+        drawHeight = usableHeight;
+        drawWidth = usableHeight * imgAspect;
+      }
+
+      const x = margin + (usableWidth - drawWidth) / 2;
+      const y = margin + (usableHeight - drawHeight) / 2;
+
+      page.drawImage(image, { x, y, width: drawWidth, height: drawHeight });
     }
-
-    const page = pdf.addPage([pageWidth, pageHeight]);
-
-    const usableWidth = pageWidth - margin * 2;
-    const usableHeight = pageHeight - margin * 2;
-
-    const imgAspect = image.width / image.height;
-    const areaAspect = usableWidth / usableHeight;
-
-    let drawWidth: number;
-    let drawHeight: number;
-
-    if (imgAspect > areaAspect) {
-      drawWidth = usableWidth;
-      drawHeight = usableWidth / imgAspect;
-    } else {
-      drawHeight = usableHeight;
-      drawWidth = usableHeight * imgAspect;
-    }
-
-    const x = margin + (usableWidth - drawWidth) / 2;
-    const y = margin + (usableHeight - drawHeight) / 2;
-
-    page.drawImage(image, { x, y, width: drawWidth, height: drawHeight });
 
     onProgress?.(Math.round(((i + 1) / total) * 100));
   }

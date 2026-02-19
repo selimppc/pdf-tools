@@ -84,7 +84,9 @@ export function ImageToPdfTool() {
     return (
       <DownloadButton
         result={result}
-        filename="images.pdf"
+        filename={files.length === 1
+          ? `${files[0].name.replace(/\.[^.]+$/, "")}.pdf`
+          : `images-${files.length}-pages.pdf`}
         onReset={handleReset}
       />
     );
