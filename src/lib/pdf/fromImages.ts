@@ -1,5 +1,33 @@
 import { PDFDocument } from "pdf-lib";
 
+async function reEncodePng(file: File): Promise<Uint8Array> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(
+        async (blob) => {
+          URL.revokeObjectURL(url);
+          if (!blob) return reject(new Error("Canvas toBlob failed"));
+          const ab = await blob.arrayBuffer();
+          resolve(new Uint8Array(ab));
+        },
+        "image/png"
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to load image"));
+    };
+    img.src = url;
+  });
+}
+
 export type PageSize = "fit" | "a4" | "letter";
 export type Orientation = "portrait" | "landscape";
 export type ImageQuality = "standard" | "high" | "maximum";
@@ -32,9 +60,18 @@ export async function imagesToPdf(
 
     let image;
     const type = file.type.toLowerCase();
+    const ext = file.name.toLowerCase().split(".").pop();
+    const isPng = type === "image/png" || ext === "png";
 
-    if (type === "image/png") {
-      image = await pdf.embedPng(uint8);
+    if (isPng) {
+      try {
+        image = await pdf.embedPng(uint8);
+      } catch {
+        // Some PNGs (color profiles, interlacing) fail with pdf-lib's parser.
+        // Re-encode via canvas to get a clean PNG that pdf-lib can handle.
+        const cleanPng = await reEncodePng(file);
+        image = await pdf.embedPng(cleanPng);
+      }
     } else {
       image = await pdf.embedJpg(uint8);
     }

@@ -9,7 +9,7 @@ export async function ocrDocument(
 
   if (file.type === "application/pdf") {
     const pdfjs = await import("pdfjs-dist");
-    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
     const bytes = await file.arrayBuffer();
     const pdf = await pdfjs.getDocument({ data: bytes }).promise;

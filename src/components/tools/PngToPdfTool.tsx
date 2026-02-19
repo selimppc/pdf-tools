@@ -57,7 +57,8 @@ export function PngToPdfTool() {
       );
       setResult(blob);
       setStage("done");
-    } catch {
+    } catch (err) {
+      console.error("PNG to PDF conversion failed:", err);
       setStage("configure");
     }
   };
