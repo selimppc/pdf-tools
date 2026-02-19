@@ -52,32 +52,34 @@ export function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold">More Tools</h4>
+            <h4 className="text-sm font-semibold">Resources</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link
-                href="/tools/rotate-pdf"
+                href="/about"
                 className="transition-colors hover:text-foreground"
               >
-                Rotate PDF
+                About
               </Link>
               <Link
-                href="/tools/jpg-to-pdf"
+                href="/privacy"
                 className="transition-colors hover:text-foreground"
               >
-                JPG to PDF
+                Privacy Policy
               </Link>
               <Link
-                href="/tools/add-watermark"
+                href="/support"
                 className="transition-colors hover:text-foreground"
               >
-                Add Watermark
+                Support Us
               </Link>
-              <Link
-                href="/tools/protect-pdf"
+              <a
+                href="https://github.com/selimppc/pdf-tools"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="transition-colors hover:text-foreground"
               >
-                Protect PDF
-              </Link>
+                GitHub
+              </a>
             </nav>
           </div>
 

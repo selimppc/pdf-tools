@@ -35,6 +35,11 @@ export function Header() {
               About
             </Button>
           </Link>
+          <Link href="/privacy">
+            <Button variant="ghost" size="sm">
+              Privacy
+            </Button>
+          </Link>
           <Badge
             variant="outline"
             className="ml-3 gap-1.5 border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
@@ -45,11 +50,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a
-            href="https://buymeacoffee.com/selimppc"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Link href="/support">
             <Button
               variant="outline"
               size="sm"
@@ -58,7 +59,7 @@ export function Header() {
               <Coffee className="h-3.5 w-3.5" />
               Support
             </Button>
-          </a>
+          </Link>
           <Button
             variant="ghost"
             size="icon"
@@ -104,17 +105,18 @@ export function Header() {
                   About
                 </Button>
               </Link>
-              <a
-                href="https://buymeacoffee.com/selimppc"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-              >
+              <Link href="/privacy" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <Shield className="h-4 w-4 text-emerald-500" />
+                  Privacy
+                </Button>
+              </Link>
+              <Link href="/support" onClick={() => setMobileMenuOpen(false)}>
                 <Button variant="ghost" className="w-full justify-start gap-2">
                   <Coffee className="h-4 w-4 text-amber-500" />
-                  Support this project
+                  Support
                 </Button>
-              </a>
+              </Link>
               <div className="mt-2">
                 <Badge
                   variant="outline"
