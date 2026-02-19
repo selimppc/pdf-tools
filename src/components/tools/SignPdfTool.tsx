@@ -23,18 +23,27 @@ export function SignPdfTool() {
     if (newFiles.length > 0) setStage("sign");
   };
 
+  const DPR = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 3) : 2;
+  const CANVAS_CSS_W = 500;
+  const CANVAS_CSS_H = 150;
+
   const getPos = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
       const canvas = canvasRef.current;
       if (!canvas) return { x: 0, y: 0 };
       const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
       if ("touches" in e) {
         return {
-          x: e.touches[0].clientX - rect.left,
-          y: e.touches[0].clientY - rect.top,
+          x: (e.touches[0].clientX - rect.left) * scaleX,
+          y: (e.touches[0].clientY - rect.top) * scaleY,
         };
       }
-      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
+      };
     },
     []
   );
@@ -59,14 +68,14 @@ export function SignPdfTool() {
       const ctx = canvasRef.current?.getContext("2d");
       if (!ctx) return;
       const pos = getPos(e);
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2.5 * DPR;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       ctx.strokeStyle = "#1a1a2e";
       ctx.lineTo(pos.x, pos.y);
       ctx.stroke();
     },
-    [getPos]
+    [getPos, DPR]
   );
 
   const stopDraw = useCallback(() => {
@@ -148,9 +157,10 @@ export function SignPdfTool() {
           <div className="rounded-xl border-2 border-dashed border-border/50 bg-white">
             <canvas
               ref={canvasRef}
-              width={500}
-              height={150}
-              className="w-full cursor-crosshair touch-none"
+              width={CANVAS_CSS_W * DPR}
+              height={CANVAS_CSS_H * DPR}
+              style={{ width: CANVAS_CSS_W, height: CANVAS_CSS_H }}
+              className="max-w-full cursor-crosshair touch-none"
               onMouseDown={startDraw}
               onMouseMove={draw}
               onMouseUp={stopDraw}

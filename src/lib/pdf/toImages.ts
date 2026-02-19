@@ -25,14 +25,22 @@ export async function pdfToImages(
     const viewport = page.getViewport({ scale: options.scale });
 
     const canvas = document.createElement("canvas");
-    canvas.width = Math.floor(viewport.width);
-    canvas.height = Math.floor(viewport.height);
-    const ctx = canvas.getContext("2d", { alpha: options.format === "png" })!;
+    canvas.width = Math.ceil(viewport.width);
+    canvas.height = Math.ceil(viewport.height);
+
+    const ctx = canvas.getContext("2d", {
+      alpha: options.format === "png",
+      willReadFrequently: false,
+    })!;
 
     if (options.format === "jpeg") {
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
+
+    // High-quality rendering settings
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
 
     await page.render({ canvas, canvasContext: ctx, viewport }).promise;
 

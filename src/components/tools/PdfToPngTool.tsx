@@ -20,7 +20,7 @@ export function PdfToPngTool() {
   const [stage, setStage] = useState<Stage>("upload");
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
-  const [scale, setScale] = useState(2);
+  const [scale, setScale] = useState(3);
 
   const handleFilesChange = (newFiles: File[]) => {
     setFiles(newFiles);

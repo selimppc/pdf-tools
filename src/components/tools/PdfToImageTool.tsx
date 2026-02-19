@@ -26,8 +26,8 @@ export function PdfToImageTool() {
   const [stage, setStage] = useState<Stage>("upload");
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
-  const [quality, setQuality] = useState(0.85);
-  const [scale, setScale] = useState(2);
+  const [quality, setQuality] = useState(0.92);
+  const [scale, setScale] = useState(3);
 
   const handleFilesChange = (newFiles: File[]) => {
     setFiles(newFiles);

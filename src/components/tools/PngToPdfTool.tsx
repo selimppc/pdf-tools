@@ -9,26 +9,20 @@ import {
   imagesToPdf,
   type PageSize,
   type Orientation,
-  type ImageQuality,
 } from "@/lib/pdf/fromImages";
 
 type Stage = "upload" | "configure" | "processing" | "done";
 
-const pageSizes: { value: PageSize; label: string }[] = [
-  { value: "fit", label: "Fit to Image" },
-  { value: "a4", label: "A4" },
-  { value: "letter", label: "Letter" },
+const pageSizes: { value: PageSize; label: string; description: string }[] = [
+  { value: "fit", label: "Auto Fit", description: "A4 page, auto orientation, image fills page" },
+  { value: "a4", label: "A4", description: "210 x 297 mm (international standard)" },
+  { value: "letter", label: "Letter", description: "8.5 x 11 in (US standard)" },
 ];
 
 const orientations: { value: Orientation; label: string }[] = [
+  { value: "auto", label: "Auto (match image)" },
   { value: "portrait", label: "Portrait" },
   { value: "landscape", label: "Landscape" },
-];
-
-const qualityOptions: { value: ImageQuality; label: string; description: string }[] = [
-  { value: "standard", label: "Standard", description: "150 DPI — good for web" },
-  { value: "high", label: "High", description: "200 DPI — sharp and clear" },
-  { value: "maximum", label: "Maximum", description: "300 DPI — print quality" },
 ];
 
 export function PngToPdfTool() {
@@ -37,8 +31,7 @@ export function PngToPdfTool() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
   const [pageSize, setPageSize] = useState<PageSize>("fit");
-  const [orientation, setOrientation] = useState<Orientation>("portrait");
-  const [quality, setQuality] = useState<ImageQuality>("high");
+  const [orientation, setOrientation] = useState<Orientation>("auto");
 
   const handleFilesChange = (newFiles: File[]) => {
     setFiles(newFiles);
@@ -52,7 +45,7 @@ export function PngToPdfTool() {
     try {
       const blob = await imagesToPdf(
         files,
-        { pageSize, orientation, quality, margin: pageSize === "fit" ? 0 : 20 },
+        { pageSize, orientation, quality: "maximum", margin: pageSize === "fit" ? 0 : 24 },
         setProgress
       );
       setResult(blob);
@@ -69,7 +62,7 @@ export function PngToPdfTool() {
     setProgress(0);
     setResult(null);
     setPageSize("fit");
-    setOrientation("portrait");
+    setOrientation("auto");
   };
 
   if (stage === "processing") {
@@ -106,18 +99,19 @@ export function PngToPdfTool() {
 
         <div className="space-y-3">
           <label className="block text-sm font-medium">Page Size</label>
-          <div className="flex gap-3">
+          <div className="grid gap-3 sm:grid-cols-3">
             {pageSizes.map((s) => (
               <button
                 key={s.value}
                 onClick={() => setPageSize(s.value)}
-                className={`rounded-xl border px-5 py-3 font-medium transition-all ${
+                className={`rounded-xl border p-4 text-left transition-all ${
                   pageSize === s.value
                     ? "border-primary bg-primary/5"
                     : "border-border/50 hover:border-border"
                 }`}
               >
-                {s.label}
+                <p className="font-medium">{s.label}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{s.description}</p>
               </button>
             ))}
           </div>
@@ -126,7 +120,7 @@ export function PngToPdfTool() {
         {pageSize !== "fit" && (
           <div className="space-y-3">
             <label className="block text-sm font-medium">Orientation</label>
-            <div className="flex gap-3">
+            <div className="grid gap-3 sm:grid-cols-3">
               {orientations.map((o) => (
                 <button
                   key={o.value}
@@ -144,24 +138,8 @@ export function PngToPdfTool() {
           </div>
         )}
 
-        <div className="space-y-3">
-          <label className="block text-sm font-medium">Output Quality</label>
-          <div className="grid gap-3 sm:grid-cols-3">
-            {qualityOptions.map((q) => (
-              <button
-                key={q.value}
-                onClick={() => setQuality(q.value)}
-                className={`rounded-xl border p-4 text-left transition-all ${
-                  quality === q.value
-                    ? "border-primary bg-primary/5"
-                    : "border-border/50 hover:border-border"
-                }`}
-              >
-                <p className="font-medium">{q.label}</p>
-                <p className="mt-0.5 text-xs text-muted-foreground">{q.description}</p>
-              </button>
-            ))}
-          </div>
+        <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-4 text-sm text-muted-foreground">
+          PNG images are embedded <strong className="text-green-600 dark:text-green-400">losslessly</strong> with full transparency — zoom in or print for maximum detail.
         </div>
 
         <div className="flex gap-3">
