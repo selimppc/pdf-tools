@@ -104,7 +104,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-blue-600/10 hover:bg-blue-600/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "organize-pages",
@@ -116,7 +116,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-blue-700/10 hover:bg-blue-700/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "compress-pdf",
@@ -152,7 +152,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-orange-400/10 hover:bg-orange-400/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "pdf-to-word",
@@ -164,7 +164,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-orange-600/10 hover:bg-orange-600/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "pdf-to-text",
@@ -176,7 +176,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-orange-300/10 hover:bg-orange-300/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "jpg-to-pdf",
@@ -200,7 +200,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-violet-400/10 hover:bg-violet-400/20",
     acceptedFiles: ".png",
     multipleFiles: true,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "word-to-pdf",
@@ -212,7 +212,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-violet-600/10 hover:bg-violet-600/20",
     acceptedFiles: ".docx,.doc",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "html-to-pdf",
@@ -224,7 +224,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-violet-300/10 hover:bg-violet-300/20",
     acceptedFiles: ".html,.htm",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "add-watermark",
@@ -236,7 +236,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-rose-500/10 hover:bg-rose-500/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "page-numbers",
@@ -248,7 +248,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-rose-400/10 hover:bg-rose-400/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "sign-pdf",
@@ -260,7 +260,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-rose-600/10 hover:bg-rose-600/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "annotate-pdf",
@@ -272,7 +272,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-rose-300/10 hover:bg-rose-300/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "protect-pdf",
@@ -284,7 +284,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-amber-500/10 hover:bg-amber-500/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "unlock-pdf",
@@ -296,7 +296,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-amber-400/10 hover:bg-amber-400/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "ocr-pdf",
@@ -308,7 +308,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-cyan-500/10 hover:bg-cyan-500/20",
     acceptedFiles: ".pdf,.jpg,.jpeg,.png",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
   {
     slug: "summarize-pdf",
@@ -320,7 +320,7 @@ export const tools: ToolDefinition[] = [
     bgColor: "bg-cyan-400/10 hover:bg-cyan-400/20",
     acceptedFiles: ".pdf",
     multipleFiles: false,
-    implemented: false,
+    implemented: true,
   },
 ];
 
