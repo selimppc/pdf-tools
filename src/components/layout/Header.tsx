@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Shield, Menu, X } from "lucide-react";
+import { Moon, Sun, Shield, Menu, X, Coffee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
@@ -45,6 +45,20 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <a
+            href="https://buymeacoffee.com/selimppc"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden gap-1.5 border-amber-500/30 bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 dark:text-amber-400 sm:flex"
+            >
+              <Coffee className="h-3.5 w-3.5" />
+              Support
+            </Button>
+          </a>
           <Button
             variant="ghost"
             size="icon"
@@ -90,6 +104,17 @@ export function Header() {
                   About
                 </Button>
               </Link>
+              <a
+                href="https://buymeacoffee.com/selimppc"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <Coffee className="h-4 w-4 text-amber-500" />
+                  Support this project
+                </Button>
+              </a>
               <div className="mt-2">
                 <Badge
                   variant="outline"

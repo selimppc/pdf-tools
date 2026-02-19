@@ -1,4 +1,4 @@
-import { Shield, Github, Heart } from "lucide-react";
+import { Shield, Github, Heart, Coffee } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
@@ -90,6 +90,17 @@ export function Footer() {
                 uploaded to any server. We don&apos;t collect any data.
               </p>
             </div>
+            <a
+              href="https://buymeacoffee.com/selimppc"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 transition-colors hover:bg-amber-500/10"
+            >
+              <Coffee className="h-4 w-4 shrink-0 text-amber-500" />
+              <p className="text-xs font-medium text-amber-600 dark:text-amber-400">
+                Support this project
+              </p>
+            </a>
           </div>
         </div>
 
@@ -103,7 +114,7 @@ export function Footer() {
               privacy
             </span>
             <a
-              href="https://github.com"
+              href="https://github.com/selimppc/pdf-tools"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground transition-colors hover:text-foreground"
