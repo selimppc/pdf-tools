@@ -6,12 +6,16 @@ import { Upload, File, X, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+const MAX_FILE_SIZE_MB = 100;
+const WARN_FILE_SIZE_MB = 50;
+
 interface FileDropzoneProps {
   accept: string;
   multiple?: boolean;
   files: File[];
   onFilesChange: (files: File[]) => void;
   maxFiles?: number;
+  maxSizeMb?: number;
   label?: string;
 }
 
@@ -21,9 +25,34 @@ export function FileDropzone({
   files,
   onFilesChange,
   maxFiles = 50,
+  maxSizeMb = MAX_FILE_SIZE_MB,
   label,
 }: FileDropzoneProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const [sizeWarning, setSizeWarning] = useState("");
+
+  const validateFiles = useCallback(
+    (incoming: File[]): File[] => {
+      const valid: File[] = [];
+      for (const f of incoming) {
+        const sizeMb = f.size / (1024 * 1024);
+        if (sizeMb > maxSizeMb) {
+          setSizeWarning(
+            `"${f.name}" is ${sizeMb.toFixed(0)}MB — max is ${maxSizeMb}MB. Try a smaller file.`
+          );
+          continue;
+        }
+        if (sizeMb > WARN_FILE_SIZE_MB) {
+          setSizeWarning(
+            `Large file (${sizeMb.toFixed(0)}MB) — processing may take a moment.`
+          );
+        }
+        valid.push(f);
+      }
+      return valid;
+    },
+    [maxSizeMb]
+  );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -39,7 +68,8 @@ export function FileDropzone({
     (e: React.DragEvent) => {
       e.preventDefault();
       setIsDragging(false);
-      const dropped = Array.from(e.dataTransfer.files);
+      setSizeWarning("");
+      const dropped = validateFiles(Array.from(e.dataTransfer.files));
       if (multiple) {
         const combined = [...files, ...dropped].slice(0, maxFiles);
         onFilesChange(combined);
@@ -47,12 +77,13 @@ export function FileDropzone({
         onFilesChange(dropped.slice(0, 1));
       }
     },
-    [files, multiple, maxFiles, onFilesChange]
+    [files, multiple, maxFiles, onFilesChange, validateFiles]
   );
 
   const handleFileSelect = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const selected = Array.from(e.target.files || []);
+      setSizeWarning("");
+      const selected = validateFiles(Array.from(e.target.files || []));
       if (multiple) {
         const combined = [...files, ...selected].slice(0, maxFiles);
         onFilesChange(combined);
@@ -61,7 +92,7 @@ export function FileDropzone({
       }
       e.target.value = "";
     },
-    [files, multiple, maxFiles, onFilesChange]
+    [files, multiple, maxFiles, onFilesChange, validateFiles]
   );
 
   const removeFile = useCallback(
@@ -130,6 +161,12 @@ export function FileDropzone({
   }
 
   return (
+    <div>
+    {sizeWarning && (
+      <div className="mb-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-sm text-amber-700 dark:text-amber-400">
+        {sizeWarning}
+      </div>
+    )}
     <label
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -164,5 +201,6 @@ export function FileDropzone({
         className="hidden"
       />
     </label>
+    </div>
   );
 }

@@ -1,54 +1,43 @@
 "use client";
 
+import { Suspense, lazy } from "react";
 import { notFound } from "next/navigation";
 import { getToolBySlug } from "@/config/tools";
 import { ToolPageShell } from "@/components/tools/ToolPageShell";
-import { MergeTool } from "@/components/tools/MergeTool";
-import { SplitTool } from "@/components/tools/SplitTool";
-import { CompressTool } from "@/components/tools/CompressTool";
-import { RotateTool } from "@/components/tools/RotateTool";
-import { PdfToImageTool } from "@/components/tools/PdfToImageTool";
-import { ImageToPdfTool } from "@/components/tools/ImageToPdfTool";
-import { RemovePagesTool } from "@/components/tools/RemovePagesTool";
-import { WatermarkTool } from "@/components/tools/WatermarkTool";
-import { PageNumbersTool } from "@/components/tools/PageNumbersTool";
-import { ProtectTool } from "@/components/tools/ProtectTool";
-import { PdfToPngTool } from "@/components/tools/PdfToPngTool";
-import { PngToPdfTool } from "@/components/tools/PngToPdfTool";
-import { PdfToTextTool } from "@/components/tools/PdfToTextTool";
-import { UnlockTool } from "@/components/tools/UnlockTool";
-import { OrganizePagesTool } from "@/components/tools/OrganizePagesTool";
-import { SignPdfTool } from "@/components/tools/SignPdfTool";
-import { AnnotateTool } from "@/components/tools/AnnotateTool";
-import { WordToPdfTool } from "@/components/tools/WordToPdfTool";
-import { HtmlToPdfTool } from "@/components/tools/HtmlToPdfTool";
-import { PdfToWordTool } from "@/components/tools/PdfToWordTool";
-import { OcrTool } from "@/components/tools/OcrTool";
-import { SummarizeTool } from "@/components/tools/SummarizeTool";
+import { Loader2 } from "lucide-react";
 
-const toolComponents: Record<string, React.ComponentType> = {
-  "merge-pdf": MergeTool,
-  "split-pdf": SplitTool,
-  "compress-pdf": CompressTool,
-  "rotate-pdf": RotateTool,
-  "pdf-to-jpg": PdfToImageTool,
-  "jpg-to-pdf": ImageToPdfTool,
-  "remove-pages": RemovePagesTool,
-  "add-watermark": WatermarkTool,
-  "page-numbers": PageNumbersTool,
-  "protect-pdf": ProtectTool,
-  "pdf-to-png": PdfToPngTool,
-  "png-to-pdf": PngToPdfTool,
-  "pdf-to-text": PdfToTextTool,
-  "unlock-pdf": UnlockTool,
-  "organize-pages": OrganizePagesTool,
-  "sign-pdf": SignPdfTool,
-  "annotate-pdf": AnnotateTool,
-  "word-to-pdf": WordToPdfTool,
-  "html-to-pdf": HtmlToPdfTool,
-  "pdf-to-word": PdfToWordTool,
-  "ocr-pdf": OcrTool,
-  "summarize-pdf": SummarizeTool,
+function ToolLoading() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 py-20">
+      <Loader2 className="h-8 w-8 animate-spin text-primary/50" />
+      <p className="text-sm text-muted-foreground">Loading tool...</p>
+    </div>
+  );
+}
+
+const toolComponents: Record<string, React.LazyExoticComponent<React.ComponentType>> = {
+  "merge-pdf": lazy(() => import("@/components/tools/MergeTool").then((m) => ({ default: m.MergeTool }))),
+  "split-pdf": lazy(() => import("@/components/tools/SplitTool").then((m) => ({ default: m.SplitTool }))),
+  "compress-pdf": lazy(() => import("@/components/tools/CompressTool").then((m) => ({ default: m.CompressTool }))),
+  "rotate-pdf": lazy(() => import("@/components/tools/RotateTool").then((m) => ({ default: m.RotateTool }))),
+  "pdf-to-jpg": lazy(() => import("@/components/tools/PdfToImageTool").then((m) => ({ default: m.PdfToImageTool }))),
+  "jpg-to-pdf": lazy(() => import("@/components/tools/ImageToPdfTool").then((m) => ({ default: m.ImageToPdfTool }))),
+  "remove-pages": lazy(() => import("@/components/tools/RemovePagesTool").then((m) => ({ default: m.RemovePagesTool }))),
+  "add-watermark": lazy(() => import("@/components/tools/WatermarkTool").then((m) => ({ default: m.WatermarkTool }))),
+  "page-numbers": lazy(() => import("@/components/tools/PageNumbersTool").then((m) => ({ default: m.PageNumbersTool }))),
+  "protect-pdf": lazy(() => import("@/components/tools/ProtectTool").then((m) => ({ default: m.ProtectTool }))),
+  "pdf-to-png": lazy(() => import("@/components/tools/PdfToPngTool").then((m) => ({ default: m.PdfToPngTool }))),
+  "png-to-pdf": lazy(() => import("@/components/tools/PngToPdfTool").then((m) => ({ default: m.PngToPdfTool }))),
+  "pdf-to-text": lazy(() => import("@/components/tools/PdfToTextTool").then((m) => ({ default: m.PdfToTextTool }))),
+  "unlock-pdf": lazy(() => import("@/components/tools/UnlockTool").then((m) => ({ default: m.UnlockTool }))),
+  "organize-pages": lazy(() => import("@/components/tools/OrganizePagesTool").then((m) => ({ default: m.OrganizePagesTool }))),
+  "sign-pdf": lazy(() => import("@/components/tools/SignPdfTool").then((m) => ({ default: m.SignPdfTool }))),
+  "annotate-pdf": lazy(() => import("@/components/tools/AnnotateTool").then((m) => ({ default: m.AnnotateTool }))),
+  "word-to-pdf": lazy(() => import("@/components/tools/WordToPdfTool").then((m) => ({ default: m.WordToPdfTool }))),
+  "html-to-pdf": lazy(() => import("@/components/tools/HtmlToPdfTool").then((m) => ({ default: m.HtmlToPdfTool }))),
+  "pdf-to-word": lazy(() => import("@/components/tools/PdfToWordTool").then((m) => ({ default: m.PdfToWordTool }))),
+  "ocr-pdf": lazy(() => import("@/components/tools/OcrTool").then((m) => ({ default: m.OcrTool }))),
+  "summarize-pdf": lazy(() => import("@/components/tools/SummarizeTool").then((m) => ({ default: m.SummarizeTool }))),
 };
 
 export function ToolClient({ slug }: { slug: string }) {
@@ -66,7 +55,9 @@ export function ToolClient({ slug }: { slug: string }) {
 
   return (
     <ToolPageShell tool={tool}>
-      <ToolComponent />
+      <Suspense fallback={<ToolLoading />}>
+        <ToolComponent />
+      </Suspense>
     </ToolPageShell>
   );
 }
