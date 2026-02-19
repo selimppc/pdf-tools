@@ -10,15 +10,15 @@ import { pdfToImages, type ToImagesOptions } from "@/lib/pdf/toImages";
 type Stage = "upload" | "configure" | "processing" | "done";
 
 const qualityOptions = [
-  { value: 0.7, label: "Good", description: "Smaller file size" },
-  { value: 0.85, label: "High", description: "Balanced" },
-  { value: 1.0, label: "Maximum", description: "Best quality" },
+  { value: 0.8, label: "Good", description: "Smaller file size" },
+  { value: 0.92, label: "High", description: "Balanced quality & size" },
+  { value: 1.0, label: "Maximum", description: "Best quality (lossless)" },
 ];
 
 const scaleOptions = [
-  { value: 1, label: "1x", description: "72 DPI" },
-  { value: 2, label: "2x", description: "144 DPI" },
-  { value: 3, label: "3x", description: "216 DPI" },
+  { value: 2, label: "Standard", description: "144 DPI — good for web" },
+  { value: 3, label: "High", description: "216 DPI — sharp text" },
+  { value: 4, label: "Maximum", description: "300 DPI — print quality" },
 ];
 
 export function PdfToImageTool() {

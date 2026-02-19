@@ -25,9 +25,14 @@ export async function pdfToImages(
     const viewport = page.getViewport({ scale: options.scale });
 
     const canvas = document.createElement("canvas");
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    const ctx = canvas.getContext("2d")!;
+    canvas.width = Math.floor(viewport.width);
+    canvas.height = Math.floor(viewport.height);
+    const ctx = canvas.getContext("2d", { alpha: options.format === "png" })!;
+
+    if (options.format === "jpeg") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
     await page.render({ canvas, canvasContext: ctx, viewport }).promise;
 
@@ -42,6 +47,9 @@ export async function pdfToImages(
     const ext = options.format === "jpeg" ? "jpg" : "png";
     const pageNum = String(i).padStart(String(totalPages).length, "0");
     zip.file(`page-${pageNum}.${ext}`, blob);
+
+    canvas.width = 0;
+    canvas.height = 0;
 
     onProgress?.(Math.round((i / totalPages) * 100));
   }

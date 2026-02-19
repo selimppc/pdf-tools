@@ -9,6 +9,7 @@ import {
   imagesToPdf,
   type PageSize,
   type Orientation,
+  type ImageQuality,
 } from "@/lib/pdf/fromImages";
 
 type Stage = "upload" | "configure" | "processing" | "done";
@@ -24,6 +25,12 @@ const orientations: { value: Orientation; label: string }[] = [
   { value: "landscape", label: "Landscape" },
 ];
 
+const qualityOptions: { value: ImageQuality; label: string; description: string }[] = [
+  { value: "standard", label: "Standard", description: "150 DPI — good for web" },
+  { value: "high", label: "High", description: "200 DPI — sharp and clear" },
+  { value: "maximum", label: "Maximum", description: "300 DPI — print quality" },
+];
+
 export function ImageToPdfTool() {
   const [files, setFiles] = useState<File[]>([]);
   const [stage, setStage] = useState<Stage>("upload");
@@ -31,6 +38,7 @@ export function ImageToPdfTool() {
   const [result, setResult] = useState<Blob | null>(null);
   const [pageSize, setPageSize] = useState<PageSize>("fit");
   const [orientation, setOrientation] = useState<Orientation>("portrait");
+  const [quality, setQuality] = useState<ImageQuality>("high");
 
   const handleFilesChange = (newFiles: File[]) => {
     setFiles(newFiles);
@@ -44,7 +52,7 @@ export function ImageToPdfTool() {
     try {
       const blob = await imagesToPdf(
         files,
-        { pageSize, orientation },
+        { pageSize, orientation, quality, margin: pageSize === "fit" ? 0 : 20 },
         setProgress
       );
       setResult(blob);
@@ -132,6 +140,26 @@ export function ImageToPdfTool() {
             </div>
           </div>
         )}
+
+        <div className="space-y-3">
+          <label className="block text-sm font-medium">Output Quality</label>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {qualityOptions.map((q) => (
+              <button
+                key={q.value}
+                onClick={() => setQuality(q.value)}
+                className={`rounded-xl border p-4 text-left transition-all ${
+                  quality === q.value
+                    ? "border-primary bg-primary/5"
+                    : "border-border/50 hover:border-border"
+                }`}
+              >
+                <p className="font-medium">{q.label}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{q.description}</p>
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="flex gap-3">
           <Button onClick={handleProcess} size="lg">

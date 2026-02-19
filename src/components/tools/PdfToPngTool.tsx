@@ -10,9 +10,9 @@ import { pdfToImages } from "@/lib/pdf/toImages";
 type Stage = "upload" | "configure" | "processing" | "done";
 
 const scaleOptions = [
-  { value: 1, label: "1x", description: "72 DPI" },
-  { value: 2, label: "2x", description: "144 DPI" },
-  { value: 3, label: "3x", description: "216 DPI" },
+  { value: 2, label: "Standard", description: "144 DPI — good for web" },
+  { value: 3, label: "High", description: "216 DPI — sharp text" },
+  { value: 4, label: "Maximum", description: "300 DPI — print quality" },
 ];
 
 export function PdfToPngTool() {
