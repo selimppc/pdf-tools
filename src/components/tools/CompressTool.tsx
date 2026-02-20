@@ -10,9 +10,9 @@ import { compressPdf, type CompressionLevel } from "@/lib/pdf/compress";
 type Stage = "upload" | "configure" | "processing" | "done";
 
 const levels: { value: CompressionLevel; label: string; description: string }[] = [
-  { value: "low", label: "Low", description: "Best quality, larger file" },
-  { value: "medium", label: "Medium", description: "Balanced quality and size" },
-  { value: "high", label: "High", description: "Smallest file, reduced quality" },
+  { value: "low", label: "Low", description: "High quality (150 DPI), moderate size reduction" },
+  { value: "medium", label: "Medium", description: "Good quality (120 DPI), strong size reduction" },
+  { value: "high", label: "High", description: "Screen quality (90 DPI), maximum compression" },
 ];
 
 export function CompressTool() {
